@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "53274546565",
+    "project_id": "chatsphere-705fb",
+    "storage_bucket": "chatsphere-705fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53274546565:android:d5c31c4effed45d5f1f4ec",
+        "android_client_info": {
+          "package_name": "com.example.chatsphere_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAz4Ay7sCEs9hYK4-jzGlGPbLOCzgV3udY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
