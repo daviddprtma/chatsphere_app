@@ -1,3 +1,4 @@
+import 'package:chatsphere_app/pages/login_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -5,6 +6,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import './pages/splash_page.dart';
 
 import './services/navigation_service.dart';
+
 
 void main() {
   runApp(SplashPage(
@@ -27,7 +29,11 @@ class MainApp extends StatelessWidget {
           backgroundColor: Color.fromRGBO(30, 29, 37, 1.0),
         ),
       ),
-      // navigatorKey: NavigationService.navigatorKey,
+      navigatorKey: NavigationService.navigatorKey,
+      initialRoute: '/login',
+      routes: {
+        '/login': (BuildContext _context) => LoginPage(),
+      },
     );
   }
 }

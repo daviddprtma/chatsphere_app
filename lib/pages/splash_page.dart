@@ -29,7 +29,13 @@ class _SplashPageState extends State<SplashPage> {
 
   Future<void> _setup() async {
     WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+        options: FirebaseOptions(
+            apiKey: 'AIzaSyAz4Ay7sCEs9hYK4-jzGlGPbLOCzgV3udY',
+            appId: '1:53274546565:android:d5c31c4effed45d5f1f4ec',
+            messagingSenderId: 'sendid',
+            projectId: 'chatsphere-705fb',
+            storageBucket: 'chatsphere-705fb.appspot.com'));
     _registerServices();
   }
 
