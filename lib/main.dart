@@ -1,3 +1,4 @@
+import 'package:chatsphere_app/pages/home_page.dart';
 import 'package:chatsphere_app/pages/login_page.dart';
 import 'package:chatsphere_app/providers/authentication_provider.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider<AuthenticationProvider>(
-              create: (BuildContext context) {
+              create: (BuildContext _context) {
             return AuthenticationProvider();
           }),
         ],
@@ -42,7 +43,8 @@ class MainApp extends StatelessWidget {
           navigatorKey: NavigationService.navigatorKey,
           initialRoute: '/login',
           routes: {
-            '/login': (BuildContext context) => LoginPage(),
+            '/login': (BuildContext _context) => LoginPage(),
+            '/home': (BuildContext _context) => HomePage()
           },
         ));
   }

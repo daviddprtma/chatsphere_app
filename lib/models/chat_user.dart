@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ChatUser {
   final String uid;
   final String name;
@@ -12,13 +14,13 @@ class ChatUser {
       required this.imageUrl,
       required this.lastSeen});
 
-  factory ChatUser.fromJson(Map<String, dynamic> json) {
+  factory ChatUser.fromJSON(Map<String, dynamic> json) {
     return ChatUser(
         uid: json['uid'],
         name: json['name'],
         email: json['email'],
         imageUrl: json['imageUrl'],
-        lastSeen: json['lastSeen'].toDate());
+        lastSeen: (json['lastSeen'] as Timestamp).toDate());
   }
 
   Map<String, dynamic> toMap() {
