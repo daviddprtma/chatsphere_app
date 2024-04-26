@@ -1,5 +1,6 @@
 import 'package:chatsphere_app/pages/home_page.dart';
 import 'package:chatsphere_app/pages/login_page.dart';
+import 'package:chatsphere_app/pages/register_page.dart';
 import 'package:chatsphere_app/providers/authentication_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -44,7 +45,8 @@ class MainApp extends StatelessWidget {
           initialRoute: '/login',
           routes: {
             '/login': (BuildContext _context) => LoginPage(),
-            '/home': (BuildContext _context) => HomePage()
+            '/register': (BuildContext _context) => RegisterPage(),
+            '/home': (BuildContext _context) => HomePage(),
           },
         ));
   }
