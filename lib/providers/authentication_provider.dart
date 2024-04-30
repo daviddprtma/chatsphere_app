@@ -17,20 +17,22 @@ class AuthenticationProvider extends ChangeNotifier {
     _navigationService = GetIt.instance.get<NavigationService>();
     _databaseService = GetIt.instance.get<DatabaseService>();
     // _firebaseAuth.signOut();
-    _firebaseAuth.authStateChanges().listen((_user) {
+    _firebaseAuth.authStateChanges().listen((User? _user) {
       if (_user != null) {
         _databaseService.updateUserLastSeen(_user.uid);
         _databaseService.getUser(_user.uid).then((_snapshot) {
-          Map<String, dynamic> _userData =
-              _snapshot.data()! as Map<String, dynamic>;
-          user = ChatUser.fromJSON({
-            "uid": _user.uid,
-            "name": _userData['name'],
-            "email": _userData['email'],
-            "imageUrl": _userData['imageUrl'],
-            "lastSeen": _userData['lastSeen']
-          });
-          _navigationService.removeAndNavigateToRoute('/home');
+          if (_snapshot.data() != null) {
+            Map<String, dynamic> _userData =
+                _snapshot.data()! as Map<String, dynamic>;
+            user = ChatUser.fromJSON({
+              "uid": _user.uid,
+              "name": _userData['name'],
+              "email": _userData['email'],
+              "imageUrl": _userData['imageUrl'],
+              "lastSeen": _userData['lastSeen']
+            });
+            _navigationService.removeAndNavigateToRoute('/home');
+          }
         });
       } else {
         _navigationService.removeAndNavigateToRoute('/login');
