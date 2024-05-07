@@ -1,10 +1,13 @@
 import 'package:chatsphere_app/models/chat.dart';
 import 'package:chatsphere_app/models/chat_message.dart';
 import 'package:chatsphere_app/models/chat_user.dart';
+import 'package:chatsphere_app/pages/chats_page.dart';
 import 'package:chatsphere_app/providers/chats_page_provider.dart';
+import 'package:chatsphere_app/services/navigation_service.dart';
 import 'package:chatsphere_app/widgets/custom_list_view_tiles.dart';
 import 'package:chatsphere_app/widgets/top_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import '../providers/authentication_provider.dart';
 
@@ -20,6 +23,8 @@ class _ChatPageState extends State<ChatPage> {
   late double _deviceWidth;
 
   late AuthenticationProvider _authenticationProvider;
+
+  late NavigationService _navigationService;
 
   late ChatPageProvider _chatPageProvider;
 
@@ -102,13 +107,16 @@ class _ChatPageState extends State<ChatPage> {
         imagePath: _chat.imageUrl(),
         isActive: _isActive,
         isActivity: _chat.activity,
-        onTap: () {});
+        onTap: () {
+          _navigationService.navigateToPage(ChatsPage(chat: _chat));
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
+    _navigationService = GetIt.instance.get<NavigationService>();
     _authenticationProvider = Provider.of<AuthenticationProvider>(context);
     return MultiProvider(
       providers: [
