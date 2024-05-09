@@ -26,11 +26,11 @@ class _ChatPageState extends State<ChatPage> {
 
   late NavigationService _navigationService;
 
-  late ChatPageProvider _chatPageProvider;
+  late ChatsPageProvider _chatPageProvider;
 
   Widget _buildUI() {
     return Builder(builder: (BuildContext _context) {
-      _chatPageProvider = _context.watch<ChatPageProvider>();
+      _chatPageProvider = _context.watch<ChatsPageProvider>();
       return Container(
         padding: EdgeInsets.symmetric(
             horizontal: _deviceWidth * 0.03, vertical: _deviceHeight * 0.02),
@@ -120,8 +120,8 @@ class _ChatPageState extends State<ChatPage> {
     _authenticationProvider = Provider.of<AuthenticationProvider>(context);
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<ChatPageProvider>(
-            create: (_) => ChatPageProvider(_authenticationProvider))
+        ChangeNotifierProvider<ChatsPageProvider>(
+            create: (_) => ChatsPageProvider(_authenticationProvider))
       ],
       child: _buildUI(),
     );

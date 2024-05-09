@@ -1,6 +1,9 @@
 import 'package:chatsphere_app/models/chat.dart';
 import 'package:chatsphere_app/providers/authentication_provider.dart';
+import 'package:chatsphere_app/providers/chat_page_provider.dart';
+import 'package:chatsphere_app/widgets/top_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ChatsPage extends StatefulWidget {
   final Chat chat;
@@ -17,17 +20,101 @@ class _chatsPageState extends State<ChatsPage> {
   late double _deviceWidth;
 
   late AuthenticationProvider _authenticationProvider;
+  late ChatPageProvider _chatPageProvider;
 
   late GlobalKey<FormState> _messageFormState;
   late ScrollController _messagesListViewController;
 
-  Widget _buildUI() {
-    return Scaffold(
-      
-    );
+  @override
+  void initState() {
+    super.initState();
+    _messageFormState = GlobalKey<FormState>();
+    _messagesListViewController = ScrollController();
   }
+
+  Widget _buildUI() {
+    return Builder(builder: (_context){
+      _chatPageProvider = _context.watch<ChatPageProvider>();
+      return Scaffold(
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: _deviceWidth * 0.03,
+              vertical: _deviceHeight * 0.02,
+            ),
+            height: _deviceHeight,
+            width: _deviceWidth * 0.97,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TopBar(this.widget.chat.title(),
+                    fontSize: 15,
+                    primaryAction: IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.delete),
+                      color: Color.fromRGBO(0, 82, 210, 1.0),
+                    ),
+                    secondaryAction: IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.arrow_back),
+                      color: Color.fromRGBO(0, 82, 210, 1.0),
+                    )),
+                _messagesListView()
+              ],
+            ),
+          ),
+        ),
+      );
+    });
+  }
+
+  Widget _messagesListView() {
+    if (_chatPageProvider.message != null) {
+      if (_chatPageProvider.messages?.isNotEmpty ?? false) {
+        return Container(
+          height: _deviceHeight * 0.74,
+          child: ListView.builder(
+            itemCount: _chatPageProvider.messages!.length,
+            itemBuilder: (BuildContext _context, int _index) {
+              return Container(
+                child: Text(
+                  _chatPageProvider.messages![_index].content,
+                  style: TextStyle(color: Colors.white),
+                ),
+              );
+            },
+          ),
+        );
+      } else {
+        return Align(
+          alignment: Alignment.center,
+          child: Text(
+            "Be the first to say Hi!",
+            style: TextStyle(color: Colors.white),
+          ),
+        );
+      }
+    } else {
+      return Center(
+        child: CircularProgressIndicator(
+          color: Colors.white,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return _buildUI();
+    _deviceHeight = MediaQuery.of(context).size.height;
+    _deviceWidth = MediaQuery.of(context).size.width;
+    _authenticationProvider = Provider.of<AuthenticationProvider>(context);
+    return MultiProvider(providers: [
+      ChangeNotifierProvider<ChatPageProvider>(
+        create: (_) => ChatPageProvider(widget.chat.uid,
+            _authenticationProvider, _messagesListViewController),
+      ),
+    ], child: _buildUI());
   }
 }
