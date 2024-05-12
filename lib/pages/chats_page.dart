@@ -1,6 +1,8 @@
 import 'package:chatsphere_app/models/chat.dart';
+import 'package:chatsphere_app/models/chat_message.dart';
 import 'package:chatsphere_app/providers/authentication_provider.dart';
 import 'package:chatsphere_app/providers/chat_page_provider.dart';
+import 'package:chatsphere_app/widgets/custom_list_view_tiles.dart';
 import 'package:chatsphere_app/widgets/top_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +35,7 @@ class _chatsPageState extends State<ChatsPage> {
   }
 
   Widget _buildUI() {
-    return Builder(builder: (_context){
+    return Builder(builder: (_context) {
       _chatPageProvider = _context.watch<ChatPageProvider>();
       return Scaffold(
         body: SingleChildScrollView(
@@ -78,11 +80,21 @@ class _chatsPageState extends State<ChatsPage> {
           child: ListView.builder(
             itemCount: _chatPageProvider.messages!.length,
             itemBuilder: (BuildContext _context, int _index) {
+              ChatMessage _message = _chatPageProvider.messages![_index];
+              bool _isOwnMessage =
+                  _message.senderID == _authenticationProvider.user.uid;
               return Container(
-                child: Text(
-                  _chatPageProvider.messages![_index].content,
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: CustomChatListViewTile(
+                    width: _deviceWidth * 0.80,
+                    deviceHeight: _deviceHeight,
+                    isOwnMessage: _isOwnMessage,
+                    message: _message,
+                    sender: this
+                        .widget
+                        .chat
+                        .members
+                        .where((_m) => _m.uid == _message.senderID)
+                        .first),
               );
             },
           ),
