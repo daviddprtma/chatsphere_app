@@ -33,7 +33,7 @@ class ChatUser {
   }
 
   String lastSeenActive() {
-    return "last seen at ${lastSeen.hour}:${lastSeen.minute}";
+    return "${lastSeen.day}/${lastSeen.month}/${lastSeen.year} at ${lastSeen.hour}:${lastSeen.minute.toString().padLeft(2, '0')}";
   }
 
   bool wasRecentlyActive() {

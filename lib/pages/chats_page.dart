@@ -2,6 +2,7 @@ import 'package:chatsphere_app/models/chat.dart';
 import 'package:chatsphere_app/models/chat_message.dart';
 import 'package:chatsphere_app/providers/authentication_provider.dart';
 import 'package:chatsphere_app/providers/chat_page_provider.dart';
+import 'package:chatsphere_app/widgets/custom_input_field.dart';
 import 'package:chatsphere_app/widgets/custom_list_view_tiles.dart';
 import 'package:chatsphere_app/widgets/top_bar.dart';
 import 'package:flutter/material.dart';
@@ -54,16 +55,21 @@ class _chatsPageState extends State<ChatsPage> {
                 TopBar(this.widget.chat.title(),
                     fontSize: 15,
                     primaryAction: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _chatPageProvider.deleteChat();
+                      },
                       icon: Icon(Icons.delete),
                       color: Color.fromRGBO(0, 82, 210, 1.0),
                     ),
                     secondaryAction: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _chatPageProvider.goBack();
+                      },
                       icon: Icon(Icons.arrow_back),
                       color: Color.fromRGBO(0, 82, 210, 1.0),
                     )),
-                _messagesListView()
+                _messagesListView(),
+                _sendMessageForm()
               ],
             ),
           ),
@@ -78,6 +84,7 @@ class _chatsPageState extends State<ChatsPage> {
         return Container(
           height: _deviceHeight * 0.74,
           child: ListView.builder(
+            controller: _messagesListViewController,
             itemCount: _chatPageProvider.messages!.length,
             itemBuilder: (BuildContext _context, int _index) {
               ChatMessage _message = _chatPageProvider.messages![_index];
@@ -115,6 +122,81 @@ class _chatsPageState extends State<ChatsPage> {
         ),
       );
     }
+  }
+
+  Widget _sendMessageForm() {
+    return Container(
+      height: _deviceHeight * 0.06,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: Color.fromRGBO(30, 29, 37, 1.0),
+      ),
+      margin: EdgeInsets.symmetric(
+          horizontal: _deviceWidth * 0.04, vertical: _deviceHeight * 0.02),
+      child: Form(
+        key: _messageFormState,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _messageTextField(),
+            _sendMessageButton(),
+            _imageMessageButton()
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _messageTextField() {
+    return SizedBox(
+      width: _deviceWidth * 0.65,
+      child: CustomTextInputField(
+          onSaved: (_value) {
+            _chatPageProvider.message = _value;
+          },
+          regEx: r"^(?!\s*$).+",
+          hintText: "Type a message",
+          obscureText: false),
+    );
+  }
+
+  Widget _sendMessageButton() {
+    double size = _deviceHeight * 0.04;
+    return Container(
+      height: size,
+      width: size,
+      child: IconButton(
+          onPressed: () {
+            if (_messageFormState.currentState!.validate()) {
+              _messageFormState.currentState!.save();
+              _chatPageProvider.sendTextMessage();
+              _messageFormState.currentState!.reset();
+            }
+          },
+          icon: Icon(
+            Icons.send,
+            color: Colors.white,
+          )),
+    );
+  }
+
+  Widget _imageMessageButton() {
+    double _size = _deviceHeight * 0.04;
+    return Container(
+        height: _size,
+        width: _size,
+        child: FloatingActionButton(
+          onPressed: () {
+            _chatPageProvider.sendImageMessage();
+          },
+          child: Icon(
+            Icons.camera_enhance,
+            color: Colors.white,
+          ),
+          backgroundColor: Color.fromRGBO(0, 82, 218, 1.0),
+        ));
   }
 
   @override

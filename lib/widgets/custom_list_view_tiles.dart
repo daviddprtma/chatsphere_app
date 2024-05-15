@@ -5,6 +5,60 @@ import 'package:chatsphere_app/widgets/rounded_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+class CustomListViewTile extends StatelessWidget {
+  final double height;
+  final String title;
+  final String subtitle;
+  final String imagePath;
+  final bool isActive;
+  final bool isActivity;
+  final Function onTap;
+
+  CustomListViewTile(
+      {required this.height,
+      required this.title,
+      required this.subtitle,
+      required this.imagePath,
+      required this.isActive,
+      required this.isActivity,
+      required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      trailing: isActivity
+          ? Icon(
+              Icons.check,
+              color: Colors.white,
+            )
+          : null,
+      onTap: () => onTap(),
+      minVerticalPadding: height * 0.20,
+      leading: RoundedImageNetworkWithStatusIndicator(
+          key: UniqueKey(),
+          imagePath: imagePath,
+          size: height / 2,
+          isActive: isActive),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: TextStyle(
+          color: Colors.white54,
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+    );
+  }
+}
+
 class CustomListViewTilesWithActivity extends StatelessWidget {
   final double height;
   final String title;
@@ -91,7 +145,7 @@ class CustomChatListViewTile extends StatelessWidget {
               ? RoundedImageNetwork(
                   key: UniqueKey(),
                   imagePath: sender.imageUrl,
-                  size: width * 0.05,
+                  size: width * 0.07,
                 )
               : Container(),
           SizedBox(
@@ -103,7 +157,11 @@ class CustomChatListViewTile extends StatelessWidget {
                   message: message,
                   height: deviceHeight * 0.06,
                   width: width)
-              : Text(message.content),
+              : ImageMessageBubble(
+                  isOwnMessage: isOwnMessage,
+                  message: message,
+                  height: deviceHeight * 0.30,
+                  width: width * 0.55)
         ],
       ),
     );
