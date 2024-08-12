@@ -4,13 +4,15 @@ class TopBar extends StatelessWidget {
   String _barTitle;
   Widget? primaryAction;
   Widget? secondaryAction;
+  Widget? thirdAction;
+  Widget? fourthAction;
   double? fontSize;
 
   late double _deviceHeight;
   late double _deviceWidth;
 
   TopBar(this._barTitle,
-      {this.primaryAction, this.secondaryAction, this.fontSize = 35});
+      {this.primaryAction, this.secondaryAction, this.thirdAction, this.fourthAction, this.fontSize = 35});
 
   @override
   Widget _buildUI() {
@@ -24,6 +26,7 @@ class TopBar extends StatelessWidget {
         children: [
           if (secondaryAction != null) secondaryAction!,
           _titleBar(),
+          if (thirdAction != null) thirdAction!,
           if (primaryAction != null) primaryAction!
         ],
       ),

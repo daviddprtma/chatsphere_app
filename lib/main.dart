@@ -34,6 +34,7 @@ class MainApp extends StatelessWidget {
           }),
         ],
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'ChatSphere',
           theme: ThemeData(
             scaffoldBackgroundColor: const Color.fromRGBO(36, 35, 49, 1.0),

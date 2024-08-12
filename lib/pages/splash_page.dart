@@ -52,7 +52,7 @@ class _SplashPageState extends State<SplashPage> {
     return MaterialApp(
         title: 'ChatSphere',
         theme: ThemeData(
-            backgroundColor: Color.fromRGBO(36, 35, 49, 1.0),
+            primaryColor: Color.fromRGBO(36, 35, 49, 1.0),
             scaffoldBackgroundColor: Color.fromRGBO(36, 35, 49, 1.0)),
         home: Scaffold(
           body: Center(

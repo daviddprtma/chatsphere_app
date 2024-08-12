@@ -7,6 +7,8 @@ import 'package:chatsphere_app/widgets/custom_list_view_tiles.dart';
 import 'package:chatsphere_app/widgets/top_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:chatsphere_app/utils.dart';
+import 'package:http/http.dart' as http;
 
 class ChatsPage extends StatefulWidget {
   final Chat chat;
@@ -28,11 +30,27 @@ class _chatsPageState extends State<ChatsPage> {
   late GlobalKey<FormState> _messageFormState;
   late ScrollController _messagesListViewController;
 
+  String? token;
+  String channelName = "randomchannelname";
+
   @override
   void initState() {
     super.initState();
     _messageFormState = GlobalKey<FormState>();
     _messagesListViewController = ScrollController();
+  }
+
+  Future<void> getToken() async {
+    await http
+        .get(Uri.parse(
+            '$tokenBaseUrl/rtc/${channelName}/publisher/uid/expiry=3600'))
+        .then((response) async {
+          if(response.statusCode == 200){
+            setState(() {
+              token = response.body;
+            });
+          }
+        });
   }
 
   Widget _buildUI() {
@@ -52,22 +70,29 @@ class _chatsPageState extends State<ChatsPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                TopBar(this.widget.chat.title(),
-                    fontSize: 15,
-                    primaryAction: IconButton(
-                      onPressed: () {
-                        _chatPageProvider.deleteChat();
-                      },
-                      icon: Icon(Icons.delete),
-                      color: Color.fromRGBO(0, 82, 210, 1.0),
-                    ),
-                    secondaryAction: IconButton(
-                      onPressed: () {
-                        _chatPageProvider.goBack();
-                      },
-                      icon: Icon(Icons.arrow_back),
-                      color: Color.fromRGBO(0, 82, 210, 1.0),
-                    )),
+                TopBar(
+                  this.widget.chat.title(),
+                  fontSize: 15,
+                  primaryAction: IconButton(
+                    onPressed: () {
+                      _chatPageProvider.deleteChat();
+                    },
+                    icon: Icon(Icons.delete),
+                    color: Color.fromRGBO(0, 82, 210, 1.0),
+                  ),
+                  secondaryAction: IconButton(
+                    onPressed: () {
+                      _chatPageProvider.goBack();
+                    },
+                    icon: Icon(Icons.arrow_back),
+                    color: Color.fromRGBO(0, 82, 210, 1.0),
+                  ),
+                  thirdAction: IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.video_call),
+                    color: Color.fromRGBO(0, 82, 210, 1.0),
+                  ),
+                ),
                 _messagesListView(),
                 _sendMessageForm()
               ],

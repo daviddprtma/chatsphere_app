@@ -39,7 +39,6 @@ class AuthenticationProvider extends ChangeNotifier {
       }
     });
   }
-
   Future<void> loginUsingEmailAndPassword(
       String _email, String _password) async {
     try {

@@ -1,0 +1,2 @@
+const appID = "";
+const tokenBaseUrl = "";
